@@ -7,29 +7,144 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/animations.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
+  <style>
+    /* Additional styles for the enhanced beanstalk */
+    .beanstalk-container {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .beanstalk-left, .beanstalk-right {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 150px;
+      overflow: hidden;
+    }
+    
+    .beanstalk-left {
+      left: 0;
+    }
+    
+    .beanstalk-right {
+      right: 0;
+    }
+    
+    .main-stalk {
+      position: absolute;
+      bottom: 0;
+      width: 20px;
+      background: linear-gradient(to right, #3a7d34, #4CAF50);
+      border-radius: 10px;
+    }
+    
+    .branch {
+      position: absolute;
+      width: 15px;
+      background: linear-gradient(to right, #3a7d34, #4CAF50);
+      transform-origin: bottom center;
+      border-radius: 8px;
+    }
+    
+    .leaf {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: #6a9e5e;
+      border-radius: 50% 0 50% 50%;
+      transform: rotate(-45deg);
+    }
+    
+    .bean-cluster {
+      position: absolute;
+      bottom: 40%;
+      width: 60px;
+      height: 60px;
+    }
+    
+    .bean {
+      position: absolute;
+      width: 20px;
+      height: 15px;
+      background-color: #8BC34A;
+      border-radius: 50%;
+      opacity: 0.8;
+    }
+    
+    /* Content positioning */
+    .magic-container {
+      position: relative;
+      z-index: 2;
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .beanstalk-left, .beanstalk-right {
+        width: 100px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .beanstalk-left, .beanstalk-right {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- Beanstalk Background Elements -->
+  <div class="beanstalk-container">
+    <div class="beanstalk-left">
+      <div class="main-stalk" style="height: 80%; left: 30px;"></div>
+      
+      <!-- Branches on left stalk -->
+      <div class="branch" style="height: 120px; left: 30px; bottom: 60%; transform: rotate(-30deg);"></div>
+      <div class="leaf" style="left: 10px; bottom: 58%;"></div>
+      
+      <div class="branch" style="height: 80px; left: 25px; bottom: 40%; transform: rotate(-15deg);"></div>
+      <div class="leaf" style="left: 0; bottom: 38%;"></div>
+      
+      <div class="branch" style="height: 100px; left: 35px; bottom: 25%; transform: rotate(-45deg);"></div>
+      <div class="leaf" style="left: 15px; bottom: 23%;"></div>
+      
+      <div class="bean-cluster" style="left: 20px; bottom: 10px;">
+        <div class="bean" style="bottom: 0; left: 0;"></div>
+        <div class="bean" style="bottom: 5px; left: 15px;"></div>
+        <div class="bean" style="bottom: 10px; left: 30px;"></div>
+      </div>
+    </div>
+    
+    <div class="beanstalk-right">
+      <div class="main-stalk" style="height: 90%; right: 40px;"></div>
+      
+      <!-- Branches on right stalk -->
+      <div class="branch" style="height: 110px; right: 40px; bottom: 65%; transform: rotate(25deg);"></div>
+      <div class="leaf" style="right: 25px; bottom: 63%;"></div>
+      
+      <div class="branch" style="height: 90px; right: 35px; bottom: 45%; transform: rotate(40deg);"></div>
+      <div class="leaf" style="right: 15px; bottom: 43%;"></div>
+      
+      <div class="branch" style="height: 70px; right: 45px; bottom: 30%; transform: rotate(15deg);"></div>
+      <div class="leaf" style="right: 30px; bottom: 28%;"></div>
+      
+      <div class="bean-cluster" style="right: 30px; bottom: 10px;">
+        <div class="bean" style="bottom: 0; right: 0;"></div>
+        <div class="bean" style="bottom: 5px; right: 15px;"></div>
+        <div class="bean" style="bottom: 10px; right: 30px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
   <div class="magic-container">
     <!-- Animated Background -->
     <div class="sky"></div>
     <div class="ground"></div>
-    
-    <!-- Magic Beans Animation -->
-    <div class="magic-beans">
-      <div class="bean bean1"></div>
-      <div class="bean bean2"></div>
-      <div class="bean bean3"></div>
-    </div>
-    
-    <!-- Beanstalk that grows on hover -->
-    <div class="beanstalk">
-      <div class="stalk"></div>
-      <div class="leaves">
-        <div class="leaf leaf1"></div>
-        <div class="leaf leaf2"></div>
-        <div class="leaf leaf3"></div>
-      </div>
-    </div>
     
     <!-- Main Content -->
     <header class="header">
@@ -45,6 +160,7 @@
       <nav class="magic-nav">
         <a href="#about" class="nav-link swing">About Us</a>
         <a href="#services" class="nav-link swing">Services</a>
+        <a href="#menu" class="nav-link swing">Menu</a>
         <a href="#contact" class="nav-link swing">Contact</a>
         <a href="#disclaimer" class="nav-link swing">Disclaimer</a>
       </nav>
@@ -53,7 +169,8 @@
       <section id="about" class="section slide-in">
         <h2 class="section-title">Our Magical Story</h2>
         <div class="content-box float">
-          <p>Once upon a time, a small bean grew into the most magnificent catering service...</p>
+          <p>Once upon a time in the enchanted valley of Gastronomia, three magical beans were planted with a whisper of culinary dreams. Overnight, they sprouted into the magnificent Magic Bean Catering - a service so extraordinary that even the giants in the clouds request our feasts!</p>
+          <p>Founded in 2023 by master chef Albus Culinary, we combine ancient recipes with modern magic to create dining experiences that defy imagination.</p>
         </div>
       </section>
       
@@ -62,11 +179,39 @@
         <div class="service-cards">
           <div class="card float-delay1">
             <h3>Wedding Feasts</h3>
-            <p>Magical dining experiences</p>
+            <p>Transform your special day with our floating desserts and self-serving dishes</p>
+            <div class="service-icon">💍</div>
           </div>
           <div class="card float-delay2">
             <h3>Corporate Events</h3>
-            <p>Enchant your guests</p>
+            <p>Impress clients with our talking centerpieces and ever-refilling goblets</p>
+            <div class="service-icon">💼</div>
+          </div>
+          <div class="card float-delay3">
+            <h3>Private Dinners</h3>
+            <p>Intimate meals where the table decor changes with each course</p>
+            <div class="service-icon">🍽️</div>
+          </div>
+        </div>
+      </section>
+      
+      <section id="menu" class="section slide-in">
+        <h2 class="section-title">Magical Menu</h2>
+        <div class="menu-grid">
+          <div class="menu-item swing">
+            <h3>Jack's Beanstalk Salad</h3>
+            <p>Fresh greens that grow as you eat them</p>
+            <span class="price">$12</span>
+          </div>
+          <div class="menu-item swing">
+            <h3>Golden Goose Pâté</h3>
+            <p>Served with bread that toasts itself</p>
+            <span class="price">$18</span>
+          </div>
+          <div class="menu-item swing">
+            <h3>Giant's Cloud Cake</h3>
+            <p>Fluffy dessert that floats above the plate</p>
+            <span class="price">$14</span>
           </div>
         </div>
       </section>
@@ -74,27 +219,69 @@
       <section id="contact" class="section slide-in">
         <h2 class="section-title">Send a Raven</h2>
         <form class="contact-form">
-          <input type="text" placeholder="Your Name" class="input-field">
-          <input type="email" placeholder="Your Email" class="input-field">
-          <textarea placeholder="Your Message" class="input-field"></textarea>
+          <input type="text" placeholder="Your Name" class="input-field" required>
+          <input type="email" placeholder="Your Email" class="input-field" required>
+          <input type="text" placeholder="Event Type" class="input-field">
+          <textarea placeholder="Your Magical Request" class="input-field" required></textarea>
           <button type="submit" class="btn btn-magic pulse">Send Message</button>
         </form>
       </section>
       
       <section id="disclaimer" class="section slide-in">
         <h2 class="section-title">Magical Disclaimer</h2>
-        <div class="disclaimer-box spin">
-          <p>All our beans are 100% magical but consumption may cause unexpected growth...</p>
+        <div class="disclaimer-box spin-slow">
+          <p>✨ All our beans are 100% magical but consumption may cause unexpected growth</p>
+          <p>✨ Dishes may float, change color, or sing - this is normal</p>
+          <p>✨ We are not responsible for portals to other dimensions that may appear during dessert</p>
+          <p>✨ By booking our services, you agree to these terms and any unforeseen enchantments</p>
         </div>
       </section>
     </main>
     
     <footer class="footer">
       <p class="bounce">© 2023 Magic Bean Catering - Where every meal is an adventure</p>
+      <div class="social-links">
+        <a href="#" class="social-link swing">📱</a>
+        <a href="#" class="social-link swing">✉️</a>
+        <a href="#" class="social-link swing">🔮</a>
+      </div>
     </footer>
   </div>
 
   <script src="js/auth.js" type="module"></script>
   <script src="js/main.js" type="module"></script>
+  
+  <script>
+    // Additional JS for interactive elements
+    document.addEventListener('DOMContentLoaded', () => {
+      // Make beans wiggle randomly
+      const beans = document.querySelectorAll('.bean');
+      beans.forEach(bean => {
+        setInterval(() => {
+          bean.style.transform = `translateY(${Math.random() * 5}px) rotate(${Math.random() * 10 - 5}deg)`;
+        }, 2000);
+      });
+      
+      // Make leaves flutter
+      const leaves = document.querySelectorAll('.leaf');
+      leaves.forEach(leaf => {
+        setInterval(() => {
+          leaf.style.transform = `rotate(${Math.random() * 20 - 45}deg)`;
+        }, 3000);
+      });
+      
+      // Check auth state and update UI
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (localStorage.getItem('isLoggedIn') {
+        document.querySelector('.auth-buttons a').classList.add('hidden');
+        logoutBtn.classList.remove('hidden');
+      }
+      
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('isLoggedIn');
+        window.location.reload();
+      });
+    });
+  </script>
 </body>
 </html>
