@@ -1,0 +1,23 @@
+{
+  "name": "catering-reservation-and-ordering-system",
+  "version": "1.0.0",
+  "description": "A web application for catering businesses to manage reservations and orders.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "firebase": "^11.8.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.0",
+    "styled-components": "^6.1.18"
+  }
+}
