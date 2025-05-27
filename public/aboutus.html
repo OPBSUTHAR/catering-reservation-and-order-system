@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Magic Bean Catering</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Georgia', serif;
+      color: #e2e8f0;
+      background: linear-gradient(135deg, #1e3a8a, #3b0764, #4c1d95, #1e3a8a);
+      background-size: 600%;
+      animation: gradientFlow 20s ease infinite;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .about-section {
+      background: rgba(17, 24, 39, 0.9);
+      border-radius: 1.5rem;
+      padding: 3rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .about-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .section-title {
+      font-size: 3.5rem;
+      color: #d4af37;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(to right, transparent, #d4af37, transparent);
+    }
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .content-card {
+      background: rgba(31, 41, 55, 0.7);
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .content-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+    }
+    .content-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    .content-card:hover::before {
+      left: 100%;
+    }
+    .content-card p {
+      font-size: 1.1rem;
+      color: #e2e8f0;
+    }
+    .highlight {
+      color: #d4af37;
+      font-style: italic;
+    }
+    .order-button {
+      display: inline-block;
+      margin: 1rem auto;
+      padding: 1rem 2rem;
+      background: linear-gradient(45deg, #d4af37, #ffd700);
+      color: #1f2937;
+      font-weight: bold;
+      border-radius: 2rem;
+      text-decoration: none;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    .content-card:hover .order-button {
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+    }
+    .order-button:hover {
+      transform: scale(1.05);
+    }
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(17, 24, 39, 0.9);
+      color: #d4af37;
+      text-align: center;
+      padding: 1rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 -2px 10px rgba(212, 175, 55, 0.3);
+      font-size: 0.9rem;
+    }
+    @media (max-width: 768px) {
+      .container {
+        padding: 2rem 1rem;
+      }
+      .section-title {
+        font-size: 2.5rem;
+      }
+      .about-section {
+        padding: 2rem;
+      }
+      .content-card {
+        padding: 1.5rem;
+      }
+      .footer {
+        font-size: 0.75rem;
+        padding: 0.5rem;
+      }
+    }
+    @media (max-width: 480px) { 
+      .section-title {
+        font-size: 2rem;
+      }
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+      .content-card {
+        padding: 1rem;
+      }
+    }
+    header {
+      background: rgba(17, 24, 39, 0.8);
+      padding: 1rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    ul {
+      display: flex;
+      list-style: none;
+    }
+    li {
+      margin: 0 1rem;
+    }
+    a {
+      text-decoration: none;
+      color: #e2e8f0;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .logo {
+      font-size: 1.5rem;
+      color: #d4af37;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+    .logo span {
+      color: #ffd700;
+    }
+    .logo:hover {
+      text-decoration: underline;
+    }
+    .highlight {
+      color: #d4af37;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+        </nav>
+    </header>
+  <div class="container">
+    <section id="about" class="about-section">
+      <h2 class="section-title">Our Magical Legacy</h2>
+      <div class="content-grid">
+        <div class="content-card">
+          <p>Beneath the starlit canopy of Gastronomia, where moonlight dances on ancient groves, three mystical beans were planted with a whispered incantation. By dawn, they had woven their magic into <span class="highlight">Magic Bean Catering</span>, a culinary legend born in 2023 under the visionary wand of Master Chef Albus Culinary. With recipes steeped in arcane lore and infused with modern enchantment, our feasts transform mere meals into symphonies of flavor, coveted even by the celestial courts above.</p>
+        </div>
+        <div class="content-card">
+          <p>Each event we craft is a bespoke masterpiece—gilded galas that shimmer with opulence, intimate gatherings that glow with warmth. Our ingredients, sourced from enchanted glades and secret markets, weave spells of delight in every bite. Through our <span class="highlight">Ethereal Ordering Portal</span>, a digital gateway as intuitive as a fairy’s charm, you can conjure your dream event. Select from our spellbinding menus, customize with a wave of your imagination, or consult our culinary wizards—all with the elegance of a single click.</p>
+          <a href="contact.html" class="order-button">Begin Your Magical Journey</a>
+        </div>
+      </div>
+    </section>
+  </div>
+  <footer class="footer">
+    Developed by Omprakash Suthar, 2025 Magic Bean Catering
+  </footer>
+
+  <script>
+    // Scroll reveal animation
+    const aboutSection = document.querySelector('.about-section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    observer.observe(aboutSection);
+
+    // Content card hover effect
+    const contentCards = document.querySelectorAll('.content-card');
+    contentCards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-10px)';
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0)';
+      });
+    });
+  </script>
+</body>
+</html>

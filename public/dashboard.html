@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical Catering - Dashboard</title>
+    <link rel="stylesheet" href="css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="logo">Magical<span>Catering</span></h1>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="active">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#">
+                    <i class="fas fa-utensils"></i>
+                    <span>Orders</span>
+                </a>
+                <a href="#">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Reservations</span>
+                </a>
+                <a href="#">
+                    <i class="fas fa-book"></i>
+                    <span>Menu</span>
+                </a>
+                <a href="#">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <h2>Welcome back, Om!</h2>
+                    <p>Today's Date: <span id="currentDate"></span></p>
+                </div>
+                <div class="header-right">
+                    <div class="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="images/user-avatar.jpg" alt="User Avatar">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <h3>Total Orders</h3>
+                        <p>245</p>
+                        <i class="fas fa-shopping-basket"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <h3>Upcoming Events</h3>
+                        <p>15</p>
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <h3>Revenue</h3>
+                        <p>$12,450</p>
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <h3>Pending Orders</h3>
+                        <p>8</p>
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Events Table -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h3>Upcoming Events</h3>
+                    <a href="#" class="btn-primary">View All</a>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Event Name</th>
+                            <th>Date</th>
+                            <th>Guests</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Wedding Reception</td>
+                            <td>2024-03-15</td>
+                            <td>250</td>
+                            <td><span class="status-badge confirmed">Confirmed</span></td>
+                            <td><button class="btn-small">Details</button></td>
+                        </tr>
+                        <!-- Add more table rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Recent Orders & Menu Specials -->
+            <div class="content-grid">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h3>Recent Orders</h3>
+                    </div>
+                    <div class="order-list">
+                        <!-- Order items -->
+                    </div>
+                </div>
+                
+                <div class="section-card menu-specials">
+                    <div class="section-header">
+                        <h3>Today's Specials</h3>
+                    </div>
+                    <div class="special-items">
+                        <div class="special-item">
+                            <img src="images/special-1.jpg" alt="Special Dish">
+                            <h4>Premium Wedding Package</h4>
+                            <p>$45 per person</p>
+                        </div>
+                        <!-- Add more special items -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize date
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', dateOptions);
+
+        // Initialize chart
+        const ctx = document.createElement('canvas');
+        ctx.id = 'salesChart';
+        // Add chart initialization code here
+
+        // Sidebar toggle for mobile
+        const sidebarToggle = document.createElement('div');
+        sidebarToggle.className = 'sidebar-toggle';
+        // Add mobile toggle functionality
+    </script>
+</body>
+</html>

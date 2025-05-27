@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catering System - Login</title>
+    <title>Magical Catering System - Login</title>
     <link rel="stylesheet" href="css/auth.css">
     <link rel="stylesheet" href="css/animations.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="auth-container">
         <div class="auth-card slide-in">
             <div class="auth-header">
-                <h1 class="logo">Catering<span>System</span></h1>
+                <h1 class="logo">Magical<span>Catering</span></h1>
                 <p>Welcome back! Please login to your account.</p>
             </div>
             
@@ -45,22 +46,53 @@
             </form>
             
             <div class="social-login">
-                <p>Or login with</p>
+                <div class="divider"><span>Or continue with</span></div>
                 <div class="social-icons">
-                    <button class="social-btn google"><i class="fab fa-google"></i></button>
-                    <button class="social-btn facebook"><i class="fab fa-facebook-f"></i></button>
-                    <button class="fab fa-twitter"></button>
+                    <button class="social-btn google" id="googleSignIn">
+                        <i class="fab fa-google"></i> Google
+                    </button>
                 </div>
             </div>
         </div>
         
         <div class="notification" id="notification"></div>
+        <footer class="developer-footer">
+            Developed by Om Prakash Suthar © 2025 Magical Catering System
+        </footer>
     </div>
-    
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="js/firebase.js"></script>
     <script src="js/auth.js"></script>
+    <script>
+        // Enhanced Google Sign-In Handler
+        document.getElementById('googleSignIn').addEventListener('click', (e) => {
+            e.preventDefault();
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
+            firebase.auth().signInWithPopup(provider)
+                .then((result) => {
+                    showNotification('Successfully signed in with Google!', 'success');
+                    // Redirect to dashboard or main page
+                    setTimeout(() => window.location.href = 'dashboard.html', 1500);
+                })
+                .catch((error) => {
+                    console.error('Google sign-in error:', error);
+                    showNotification(`Google sign-in failed: ${error.message}`, 'error');
+                });
+        });
+
+        // Notification function
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
 </body>
 </html>

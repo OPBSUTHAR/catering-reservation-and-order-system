@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Form</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #1e3a8a, #3b0764, #4c1d95, #1e3a8a);
+      background-size: 600%;
+      animation: luxuryGradient 20s ease infinite;
+      overflow-x: hidden;
+      padding-bottom: 4rem; /* Prevents footer overlap */
+      padding-top: 5rem; /* Offset for fixed header height */
+    }
+    @keyframes luxuryGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .section {
+      animation: slideIn 1s ease-out;
+    }
+    .input-field {
+      background: linear-gradient(145deg, #2d3748, #4a5568);
+      border: 2px solid #d4af37;
+      border-radius: 1.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .input-field::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+      transition: 0.5s;
+    }
+    .input-field:focus::before,
+    .input-field:hover::before {
+      left: 100%;
+    }
+    .input-field:focus {
+      transform: scale(1.03);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+      background: linear-gradient(145deg, #4a5568, #2d3748);
+      border-color: #ffd700;
+    }
+    .input-field::placeholder {
+      color: #d4af37;
+      opacity: 0.7;
+      font-style: italic;
+    }
+    .btn-magic {
+      background: linear-gradient(45deg, #d4af37, #ffd700);
+      border: none;
+      border-radius: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .btn-magic:hover {
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.9);
+      transform: translateY(-2px);
+    }
+    .btn-magic:active::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 15px;
+      height: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      animation: sparkleBurst 0.6s ease forwards;
+    }
+    @keyframes slideIn {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes sparkleBurst {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+    }
+    .alert {
+      transition: opacity 0.5s ease-in-out;
+      background: linear-gradient(45deg, #4a5568, #2d3748);
+      border-radius: 1rem;
+      padding: 0.5rem;
+    }
+    #particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      animation: fadeIn 1s ease-out;
+      box-shadow: 0 -2px 10px rgba(212, 175, 55, 0.3);
+    }
+    @media (max-width: 640px) {
+      .footer {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+      }
+      body {
+        padding-top: 6rem; /* Extra padding for mobile */
+      }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .section-title {
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    .contact-form {
+      animation: fadeIn 1s ease-out;
+    }
+    @media (max-width: 640px) {
+      .section-title {
+        font-size: 2.5rem;
+      }
+      .input-field {
+        font-size: 0.9rem;
+      }
+      .btn-magic {
+        font-size: 0.9rem;
+      }
+    }
+    nav a {
+      transition: color 0.3s ease;
+    }
+    nav a:hover {
+      color: #ffd700;
+    }
+    .text-yellow-300 {
+      color: #ffd700;
+    }
+    .text-yellow-200 {
+      color: #d4af37;
+    }
+    .text-yellow-100 {
+      color: #fefcbf;
+    }
+    .font-bold {
+      font-weight: bold;
+    }
+    .text-center {
+      text-align: center;
+    }
+    .text-3xl {
+      font-size: 3rem;
+    }
+    .text-white {
+      color: #fff;
+    }
+    .bg-gray-900 {
+      background-color: #1a202c;
+    }
+    .backdrop-blur-md {
+      backdrop-filter: blur(10px);
+    }
+    .shadow-lg {
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .section {
+      padding: 2rem;
+      margin: 2rem auto;
+      background: rgba(26, 32, 44, 0.8);
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .input-field {
+      padding: 0.5rem;
+      border: 2px solid #d4af37;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    .input-field:focus {
+      border-color: #ffd700;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+    }
+    .btn-magic {
+      padding: 0.75rem;
+      background: linear-gradient(45deg, #d4af37, #ffd700);
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .btn-magic:hover {
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+      transform: translateY(-2px);
+    }
+    .btn-magic:active {
+      transform: translateY(2px);
+    }
+    .alert {
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      background: linear-gradient(45deg, #4a5568, #2d3748);
+      color: #d4af37;
+    }
+    .alert.hidden {
+      display: none;
+    }
+    .alert.opacity-0 {
+      opacity: 0;
+    }
+    .alert.text-sm {
+      font-size: 0.875rem;
+    }
+    .alert.text-center {
+      text-align: center;
+    }
+    .alert.text-yellow-200 {
+      color: #d4af37;
+    }
+    .alert.text-white {
+      color: #fff;
+    }
+  </style>
+</head>
+<body class="text-white font-sans">
+  <header class="bg-gray-900/90 backdrop-blur-md shadow-lg fixed top-0 left-0 w-full z-50 p-4">
+    <h1 class="text-3xl font-bold text-yellow-300 text-center">Magic Bean Catering</h1>
+    <nav class="mt-2 text-center">
+      <a href="index.html" class="text-yellow-200 hover:text-yellow-300 mx-4">Home</a>
+      <a href="aboutus.html" class="text-yellow-200 hover:text-yellow-300 mx-4">About Us</a>
+      <a href="services.html" class="text-yellow-200 hover:text-yellow-300 mx-4">Services</a>
+      <a href="disclaimer.html" class="text-yellow-200 hover:text-yellow-300 mx-4">Disclaimer</a>
+      <a href="index.html" class="text-yellow-200 hover:text-yellow-300 mx-4">Contact</a>
+    </nav>
+  </header>
+
+  <canvas id="particles"></canvas>
+  <section id="contact" class="section max-w-lg mx-auto my-10 p-8 bg-gray-900/90 rounded-2xl shadow-2xl backdrop-blur-md">
+    <h2 class="section-title text-4xl font-bold text-center text-yellow-300 mb-8">Send a Raven</h2>
+    <form id="contact-form" class="contact-form space-y-6">
+      <input type="text" name="name" placeholder="Your Name" class="input-field w-full p-4 text-white" required>
+      <input type="email" name="email" placeholder="Your Email" class="input-field w-full p-4 text-white" required>
+      <input type="text" name="event_type" placeholder="Event Type" class="input-field w-full p-4 text-white">
+      <textarea name="message" placeholder="Your Magical Request" class="input-field w-full p-4 text-white h-36" required></textarea>
+      <button type="submit" class="btn btn-magic w-full p-4 text-white font-semibold">Send Message</button>
+      <div id="alert-message" class="alert hidden text-center text-sm text-yellow-200"></div>
+    </form>
+  </section>
+  <footer class="footer text-center py-4 bg-gray-900/90 text-yellow-200 backdrop-blur-md">
+    Developed by Omprakash Suthar, 2025 Magic Bean Catering
+  </footer>
+
+  <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Particle animation for submission
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    let particles = [];
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 6 + 2;
+        this.speedX = Math.random() * 2 - 1;
+        this.speedY = Math.random() * 2 - 1;
+        this.opacity = 1;
+        this.color = `hsl(${Math.random() * 60 + 40}, 70%, 70%)`;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.opacity -= 0.015;
+        if (this.opacity <= 0) {
+          this.opacity = 0;
+        }
+      }
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function createParticles() {
+      for (let i = 0; i < 75; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = particles.filter(p => p.opacity > 0);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      if (particles.length > 0) {
+        requestAnimationFrame(animateParticles);
+      }
+    }
+
+    document.getElementById('contact-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const form = event.target;
+      const alertDiv = document.getElementById('alert-message');
+
+      // Save form data to Firestore
+      db.collection('contacts').add({
+        name: form.name.value,
+        email: form.email.value,
+        event_type: form.event_type.value || 'Not specified',
+        message: form.message.value,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(() => {
+        alertDiv.textContent = 'Your message has been sent! You will be contacted within 7 working days if your request is of interest. Thank you!';
+        alertDiv.classList.remove('hidden');
+        createParticles();
+        animateParticles();
+        setTimeout(() => {
+          alertDiv.classList.add('opacity-0');
+          setTimeout(() => {
+            alertDiv.classList.add('hidden');
+            alertDiv.classList.remove('opacity-0');
+            alertDiv.textContent = '';
+          }, 500);
+        }, 5000);
+        form.reset();
+      })
+      .catch(error => {
+        alertDiv.textContent = 'Failed to save message. Please try again later.';
+        alertDiv.classList.remove('hidden');
+        console.error('Firestore error:', error);
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>

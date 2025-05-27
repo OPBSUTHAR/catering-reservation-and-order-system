@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disclaimer - Magic Bean Catering</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Georgia', serif;
+      color: #e2e8f0;
+      background: linear-gradient(135deg, #1e3a8a, #3b0764, #4c1d95, #1e3a8a);
+      background-size: 600%;
+      animation: gradientFlow 20s ease infinite;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .disclaimer-section {
+      background: rgba(17, 24, 39, 0.9);
+      border-radius: 1.5rem;
+      padding: 3rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .disclaimer-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .section-title {
+      font-size: 3.5rem;
+      color: #d4af37;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(to right, transparent, #d4af37, transparent);
+    }
+    .disclaimer-content {
+      display: grid;
+      gap: 1.5rem;
+    }
+    .disclaimer-item {
+      background: rgba(31, 41, 55, 0.7);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .disclaimer-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+    }
+    .disclaimer-item::before {
+      content: '✨';
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 1.5rem;
+      opacity: 0.3;
+      transition: opacity 0.3s ease;
+    }
+    .disclaimer-item:hover::before {
+      opacity: 0.8;
+    }
+    .disclaimer-item p {
+      font-size: 1rem;
+      color: #e2e8f0;
+      margin-left: 2rem;
+    }
+    .highlight {
+      color: #d4af37;
+      font-style: italic;
+    }
+    .terms-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+    .terms-checkbox {
+      display: none;
+    }
+    .terms-label {
+      position: relative;
+      padding-left: 2.5rem;
+      font-size: 1rem;
+      color: #e2e8f0;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+    .terms-label:hover {
+      color: #d4af37;
+    }
+    .terms-label::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1.5rem;
+      height: 1.5rem;
+      background: rgba(31, 41, 55, 0.7);
+      border: 2px solid #d4af37;
+      border-radius: 0.5rem;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .terms-checkbox:checked + .terms-label::before {
+      background: #d4af37;
+      border-color: #ffd700;
+      animation: checkGlow 0.5s ease;
+    }
+    .terms-label::after {
+      content: '✔';
+      position: absolute;
+      left: 0.4rem;
+      top: 50%;
+      transform: translateY(-50%) scale(0);
+      color: #1f2937;
+      font-size: 1rem;
+      transition: transform 0.3s ease;
+    }
+    .terms-checkbox:checked + .terms-label::after {
+      transform: translateY(-50%) scale(1);
+    }
+    @keyframes checkGlow {
+      0% { box-shadow: 0 0 0 rgba(212, 175, 55, 0); }
+      50% { box-shadow: 0 0 10px rgba(212, 175, 55, 0.8); }
+      100% { box-shadow: 0 0 0 rgba(212, 175, 55, 0); }
+    }
+    .proceed-button {
+      display: block;
+      width: 200px;
+      margin: 1rem auto;
+      padding: 1rem;
+      background: linear-gradient(45deg, #d4af37, #ffd700);
+      color: #1f2937;
+      font-weight: bold;
+      border-radius: 2rem;
+      text-align: center;
+      text-decoration: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .proceed-button.enabled {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .proceed-button.enabled:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+    }
+    .proceed-button.enabled:active {
+      transform: scale(0.95);
+    }
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(17, 24, 39, 0.9);
+      color: #d4af37;
+      text-align: center;
+      padding: 1rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 -2px 10px rgba(212, 175, 55, 0.3);
+      font-size: 0.9rem;
+    }
+    @media (max-width: 768px) {
+      .container {
+        padding: 2rem 1rem;
+      }
+      .section-title {
+        font-size: 2.5rem;
+      }
+      .disclaimer-section {
+        padding: 2rem;
+      }
+      .disclaimer-item {
+        padding: 1rem;
+      }
+      .disclaimer-item p {
+        font-size: 0.9rem;
+        margin-left: 1.5rem;
+      }
+      .terms-label {
+        font-size: 0.9rem;
+        padding-left: 2rem;
+      }
+      .terms-label::before {
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+      .terms-label::after {
+        left: 0.3rem;
+        font-size: 0.8rem;
+      }
+      .footer {
+        font-size: 0.75rem;
+        padding: 0.5rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .section-title {
+        font-size: 2rem;
+      }
+      .disclaimer-item p {
+        font-size: 0.8rem;
+        margin-left: 1rem;
+      }
+      .terms-label {
+        font-size: 0.8rem;
+        padding-left: 1.5rem;
+      }
+      .terms-label::before {
+        width: 1rem;
+        height: 1rem;
+      }
+      .terms-label::after {
+        left: 0.2rem;
+        font-size: 0.7rem;
+      }
+    }
+    @media (max-width: 375px) {
+      .section-title {
+        font-size: 1.8rem;
+      }
+      .disclaimer-item p {
+        font-size: 0.75rem;
+        margin-left: 0.8rem;
+      }
+      .terms-label {
+        font-size: 0.75rem;
+        padding-left: 1.2rem;
+      }
+      .terms-label::before {
+        width: 0.8rem;
+        height: 0.8rem;
+      }
+      .terms-label::after {
+        left: 0.15rem;
+        font-size: 0.65rem;
+      }
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+    }
+    nav ul li {
+      margin: 0 1rem;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #e2e8f0;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: #d4af37;
+    }
+  </style>
+</head>
+<body>
+    <header>
+    <h1 class="logo">Magic Bean Catering</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="aboutus.html">About Us</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    </header>
+  <div class="container">
+    <section id="disclaimer" class="disclaimer-section">
+      <h2 class="section-title">Our Magical Covenant</h2>
+      <div class="disclaimer-content">
+        <div class="disclaimer-item">
+          <p>At <span class="highlight">Magic Bean Catering</span>, we weave enchantment into every event, crafting experiences that linger in the heart like a cherished spell. Our culinary creations, born from the mystical valley of Gastronomia, are designed to delight and inspire. While our dishes are crafted with the utmost care, their magical properties may evoke unexpected moments of wonder, such as subtle glows or harmonious notes, which are a testament to their extraordinary nature.</p>
+        </div>
+        <div class="disclaimer-item">
+          <p>We take pride in our <span class="highlight">Ethereal Ordering Portal</span>, a seamless platform that transforms your vision into reality with the grace of a fairy’s touch. This intuitive system allows you to curate your event with ease, selecting from our enchanted menus or collaborating with our culinary wizards. While we strive for perfection, any unforeseen technical enchantments (e.g., temporary portal fluctuations) are beyond our control, and we appreciate your understanding.</p>
+        </div>
+        <div class="disclaimer-item">
+          <p>Your trust is our greatest treasure. By engaging our services, you embrace the possibility of extraordinary experiences, including rare occurrences like ethereal mists during dessert or fleeting glimpses of Gastronomia’s magic. <span class="highlight">Magic Bean Catering</span> is not liable for unintended magical phenomena, such as temporary levitation of tableware or portals to whimsical realms, as these are inherent to our craft.</p>
+        </div>
+        <div class="disclaimer-item">
+          <p>We are committed to your safety and satisfaction, ensuring all ingredients are sourced from trusted, enchanted glades under the guidance of Master Chef Albus Culinary. However, guests with sensitivities to magical elements are encouraged to inform us in advance. By accepting these terms, you join us in a journey where every event is a tapestry of wonder, woven with care and passion.</p>
+        </div>
+      </div>
+      <div class="terms-container">
+        <input type="checkbox" id="terms-checkbox" class="terms-checkbox">
+        <label for="terms-checkbox" class="terms-label">I accept the terms and conditions of Magic Bean Catering</label>
+      </div>
+      <a href="index.html" class="proceed-button" id="proceed-button">Proceed to Enchantment</a>
+    </section>
+  </div>
+  <footer class="footer">
+    Developed by Omprakash Suthar, 2025 Magic Bean Catering
+  </footer>
+
+  <script>
+    // Scroll reveal animation
+    const disclaimerSection = document.querySelector('.disclaimer-section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    observer.observe(disclaimerSection);
+
+    // Disclaimer item hover effect
+    const disclaimerItems = document.querySelectorAll('.disclaimer-item');
+    disclaimerItems.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        item.style.transform = 'translateY(-5px)';
+      });
+      item.addEventListener('mouseleave', () => {
+        item.style.transform = 'translateY(0)';
+      });
+    });
+
+    // Checkbox and button interaction
+    const termsCheckbox = document.getElementById('terms-checkbox');
+    const proceedButton = document.getElementById('proceed-button');
+
+    termsCheckbox.addEventListener('change', () => {
+      if (termsCheckbox.checked) {
+        proceedButton.classList.add('enabled');
+        // Trigger subtle sparkle effect on checkbox
+        const sparkle = document.createElement('div');
+        sparkle.style.position = 'absolute';
+        sparkle.style.top = '50%';
+        sparkle.style.left = '1rem';
+        sparkle.style.width = '10px';
+        sparkle.style.height = '10px';
+        sparkle.style.background = '#d4af37';
+        sparkle.style.borderRadius = '50%';
+        sparkle.style.transform = 'translateY(-50%)';
+        sparkle.style.animation = 'sparkleFade 0.5s ease forwards';
+        termsCheckbox.parentElement.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 500);
+      } else {
+        proceedButton.classList.remove('enabled');
+      }
+    });
+
+    // Sparkle animation for checkbox
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes sparkleFade {
+        0% { transform: translateY(-50%) scale(1); opacity: 1; }
+        100% { transform: translateY(-50%) scale(3); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Prevent button click if disabled
+    proceedButton.addEventListener('click', (e) => {
+      if (!termsCheckbox.checked) {
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>

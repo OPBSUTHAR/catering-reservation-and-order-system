@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services - Magic Bean Catering</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Georgia', serif;
+      color: #e2e8f0;
+      background: linear-gradient(135deg, #1e3a8a, #3b0764, #4c1d95, #1e3a8a);
+      background-size: 600%;
+      animation: gradientFlow 20s ease infinite;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+    .services-section {
+      background: rgba(17, 24, 39, 0.9);
+      border-radius: 1.5rem;
+      padding: 3rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .services-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .section-title {
+      font-size: 3.5rem;
+      color: #d4af37;
+      text-align: center;
+      margin-bottom: 2rem;
+      text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(to right, transparent, #d4af37, transparent);
+    }
+    .intro-text {
+      font-size: 1.2rem;
+      color: #e2e8f0;
+      text-align: center;
+      margin-bottom: 3rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .filter-buttons {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .filter-button {
+      padding: 0.8rem 1.5rem;
+      margin: 0 0.5rem;
+      background: rgba(31, 41, 55, 0.7);
+      color: #d4af37;
+      border: 2px solid #d4af37;
+      border-radius: 2rem;
+      cursor: pointer;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .filter-button.active, .filter-button:hover {
+      background: #d4af37;
+      color: #1f2937;
+    }
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .service-card {
+      background: rgba(31, 41, 55, 0.7);
+      border-radius: 1rem;
+      padding: 2rem;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      perspective: 1000px;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .service-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .service-card.youth:hover {
+      box-shadow: 0 0 20px rgba(255, 105, 180, 0.6);
+    }
+    .service-card.romantic:hover {
+      box-shadow: 0 0 20px rgba(255, 99, 71, 0.6);
+    }
+    .service-card.corporate:hover {
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+    }
+    .service-card:hover {
+      transform: translateY(-10px) rotateX(5deg);
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+    .service-card.youth::before {
+      background: linear-gradient(90deg, transparent, rgba(255, 105, 180, 0.3), transparent);
+    }
+    .service-card.romantic::before {
+      background: linear-gradient(90deg, transparent, rgba(255, 99, 71, 0.3), transparent);
+    }
+    .service-card:hover::before {
+      left: 100%;
+    }
+    .service-icon {
+      font-size: 3rem;
+      color: #d4af37;
+      margin-bottom: 1rem;
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+    .service-icon.youth {
+      color: #ff69b4;
+    }
+    .service-icon.romantic {
+      color: #ff6347;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { text-shadow: 0 0 5px rgba(212, 175, 55, 0.5); }
+      50% { text-shadow: 0 0 15px rgba(212, 175, 55, 0.8); }
+    }
+    .service-card h3 {
+      font-size: 1.8rem;
+      color: #d4af37;
+      margin-bottom: 1rem;
+    }
+    .service-card.youth h3 {
+      color: #ff69b4;
+    }
+    .service-card.romantic h3 {
+      color: #ff6347;
+    }
+    .service-card p {
+      font-size: 1rem;
+      color: #e2e8f0;
+    }
+    .ordering-system {
+      margin-top: 3rem;
+      background: rgba(31, 41, 55, 0.7);
+      border-radius: 1rem;
+      padding: 2rem;
+      text-align: center;
+    }
+    .ordering-system h3 {
+      font-size: 2rem;
+      color: #d4af37;
+      margin-bottom: 1rem;
+    }
+    .ordering-system p {
+      font-size: 1.1rem;
+      color: #e2e8f0;
+      max-width: 600px;
+      margin: 0 auto 1.5rem;
+    }
+    .order-button {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: linear-gradient(45deg, #d4af37, #ffd700);
+      color: #1f2937;
+      font-weight: bold;
+      border-radius: 2rem;
+      text-decoration: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .order-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+    }
+    .highlight {
+      color: #d4af37;
+      font-style: italic;
+    }
+    .nav-links {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .nav-links a {
+      color: #d4af37;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover {
+      color: #ffd700;
+    }
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(17, 24, 39, 0.9);
+      color: #d4af37;
+      text-align: center;
+      padding: 1rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 -2px 10px rgba(212, 175, 55, 0.3);
+      font-size: 0.9rem;
+    }
+    @media (max-width: 768px) {
+      .container {
+        padding: 2rem 1rem;
+      }
+      .section-title {
+        font-size: 2.5rem;
+      }
+      .services-section {
+        padding: 2rem;
+      }
+      .service-card {
+        padding: 1.5rem;
+      }
+      .service-card h3 {
+        font-size: 1.5rem;
+      }
+      .service-card p {
+        font-size: 0.9rem;
+      }
+      .ordering-system h3 {
+        font-size: 1.8rem;
+      }
+      .ordering-system p {
+        font-size: 1rem;
+      }
+      .filter-button {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+      .footer {
+        font-size: 0.75rem;
+        padding: 0.5rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .service-icon {
+        font-size: 2.5rem;
+      }
+      .section-title {
+        font-size: 2rem;
+      }
+      .service-card h3 {
+        font-size: 1.3rem;
+      }
+      .service-card p {
+        font-size: 0.9rem;
+      }
+      .ordering-system h3 {
+        font-size: 1.5rem;
+      }
+      .ordering-system p {
+        font-size: 0.9rem;
+      }
+    }
+
+    header {
+      background: rgba(17, 24, 39, 0.9);
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+    }
+    .logo {
+      float: left;
+      margin-right: 2rem;
+    }
+    .logo img {
+      width: 100px;
+    }
+    .nav-links {
+      float: right;
+    }
+    .nav-links ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links li {
+      display: inline-block;
+      margin-right: 2rem;
+    }
+    .nav-links a {
+      color: #d4af37;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover {
+      color: #ffd700;
+  </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="Magic Bean Catering Logo">
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="services.html" class="active">Services</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+  <div class="container">
+    <section id="services" class="services-section">
+      <h2 class="section-title">Our Magical Offerings</h2>
+      <p class="intro-text">
+        At <span class="highlight">Magic Bean Catering</span>, we transcend the ordinary, blending ancient culinary magic with futuristic innovation. Born in the mystical valley of Gastronomia under Master Chef Albus Culinary’s visionary wand, our services craft unforgettable experiences for every occasion. From ethereal feasts to dynamic gatherings, we weave wonder, joy, and sophistication into every moment, tailored to your dreams.
+      </p>
+      <div class="filter-buttons">
+        <button class="filter-button active" data-filter="all">All</button>
+        <button class="filter-button" data-filter="youth">Youth</button>
+        <button class="filter-button" data-filter="corporate">Corporate</button>
+        <button class="filter-button" data-filter="romantic">Romantic</button>
+      </div>
+      <div class="service-grid">
+        <div class="service-card youth" data-category="youth">
+          <div class="service-icon youth">🎓</div>
+          <h3>School Events</h3>
+          <p>Spark joy at school gatherings with our vibrant, interactive feasts. Color-changing desserts and self-dancing plates captivate young minds, while wholesome, magical ingredients ensure nourishment. Our AI-curated menus adapt to dietary needs, making every event a fun, inclusive celebration that students cherish.</p>
+        </div>
+        <div class="service-card youth" data-category="youth">
+          <div class="service-icon youth">🎉</div>
+          <h3>College Festivals</h3>
+          <p>Elevate college festivals with our high-energy, futuristic banquets. Neon-lit food stations and holographic drink dispensers create an electrifying vibe, while our enchanted dishes fuel late-night revelry. Customizable themes ensure every fest is a trending, Instagram-worthy spectacle.</p>
+        </div>
+        <div class="service-card youth" data-category="youth">
+          <div class="service-icon youth">🏛️</div>
+          <h3>University Galas</h3>
+          <p>Transform university events into sophisticated yet youthful galas. Dynamic table projections shift with each course, and our ethereal canapés dazzle guests. Tailored to academic prestige, our services blend magic and modernity, creating memorable evenings that honor tradition and innovation.</p>
+        </div>
+        <div class="service-card youth" data-category="youth">
+          <div class="service-icon youth">🎈</div>
+          <h3>Teen Parties</h3>
+          <p>Ignite teen parties with our trendy, magical spreads. Glow-in-the-dark treats and interactive food pods engage young guests, while our Ethereal Ordering System lets teens co-create menus with flair. Every party is a vibrant, social-media-ready adventure that resonates with youthful energy.</p>
+        </div>
+        <div class="service-card romantic" data-category="romantic">
+          <div class="service-icon romantic">💞</div>
+          <h3>Teen Couples’ Dinners</h3>
+          <p>Craft romantic moments for teen couples with our intimate, enchanted dinners. Starlit table settings and heart-shaped, levitating desserts set the mood, while personalized menus reflect their story. Our magical ambiance ensures a dreamy, Instagram-perfect date that kindles young love.</p>
+        </div>
+        <div class="service-card romantic" data-category="romantic">
+          <div class="service-icon romantic">💍</div>
+          <h3>Wedding Feasts</h3>
+          <p>Enchant your special day with our celestial wedding feasts, where desserts levitate gracefully and dishes serve themselves with a whisper of magic. Holographic table settings shift with the mood, crafted with Gastronomia’s enchanted ingredients, ensuring a celebration as timeless as your vows.</p>
+        </div>
+        <div class="service-card corporate" data-category="corporate">
+          <div class="service-icon corporate">💼</div>
+          <h3>Corporate Galas</h3>
+          <p>Elevate professional gatherings with our futuristic corporate galas. Interactive centerpieces narrate brand stories, and self-replenishing goblets ensure seamless service. Our menus fuse magical flavors with precision, creating an atmosphere of sophistication that captivates clients and colleagues.</p>
+        </div>
+        <div class="service-card corporate" data-category="corporate">
+          <div class="service-icon corporate">🤝</div>
+          <h3>Private Office Meetings</h3>
+          <p>Enhance private office meetings with our discreet, high-tech catering. Smart trays deliver personalized dishes, and augmented-reality menus streamline selections. Designed for efficiency and elegance, our service ensures focused discussions in an ambiance of understated magic.</p>
+        </div>
+        <div class="service-card corporate" data-category="corporate">
+          <div class="service-icon corporate">🌐</div>
+          <h3>Collaborative Events</h3>
+          <p>Foster partnerships with our collaborative events, where shared plates spark connection and holographic displays showcase ideas. Our adaptive menus cater to diverse teams, blending Gastronomia’s magic with modern flair to create dynamic, inspiring gatherings that drive innovation.</p>
+        </div>
+        <div class="service-card corporate" data-category="corporate">
+          <div class="service-icon corporate">🏢</div>
+          <h3>MNC Conferences</h3>
+          <p>Impress global audiences at MNC conferences with our world-class catering. Seamless service, AI-optimized menus, and interactive food stations elevate large-scale events. Our enchanted dishes and futuristic presentations reflect corporate excellence, ensuring a lasting impact.</p>
+        </div>
+        <div class="service-card romantic" data-category="romantic">
+          <div class="service-icon romantic">🍽️</div>
+          <h3>Private Dinners</h3>
+          <p>Indulge in intimate private dinners where each course unveils a new chapter of enchantment. Dynamic table decor reflects the flavors, while bespoke dishes resonate with your desires. Perfect for exclusive gatherings, these dinners promise a personal, magical experience.</p>
+        </div>
+      </div>
+      <div class="ordering-system">
+        <h3>The Ethereal Ordering System</h3>
+        <p>
+          Our <span class="highlight">Ethereal Ordering System</span> is a masterpiece of magical technology, designed to cater to every audience with effortless precision. This AI-driven digital portal offers a seamless experience, from group orders for school events to romantic customizations for couples and sophisticated invoicing for MNCs. Explore curated menus, access real-time availability, and collaborate with our culinary wizards to craft your vision. With live tracking and personalized recommendations, the system transforms event planning into a captivating journey, as enchanting as the feasts we create.
+        </p>
+        <a href="index.html" class="order-button">Begin Your Journey</a>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Contact Us</a>
+        <a href="disclaimer.html">Disclaimer</a>
+        <a href="aboutus.html">About Us</a>
+      </div>
+    </section>
+  </div>
+  <footer class="footer">
+    Developed by Omprakash Suthar, 2025 Magic Bean Catering
+  </footer>
+
+  <script>
+    // Scroll reveal animation
+    const servicesSection = document.querySelector('.services-section');
+    const serviceCards = document.querySelectorAll('.service-card');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          serviceCards.forEach((card, index) => {
+            setTimeout(() => {
+              card.classList.add('visible');
+            }, index * 100);
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    observer.observe(servicesSection);
+
+    // Initialize card opacity and transform
+    serviceCards.forEach(card => {
+      card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    });
+
+    // Service card hover effect
+    serviceCards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        const icon = card.querySelector('.service-icon');
+        icon.style.animation = 'pulseGlow 1s ease-in-out infinite';
+        card.style.transform = 'translateY(-10px) rotateX(5deg)';
+      });
+      card.addEventListener('mouseleave', () => {
+        const icon = card.querySelector('.service-icon');
+        icon.style.animation = 'pulseGlow 2s ease-in-out infinite';
+        card.style.transform = 'translateY(0) rotateX(0)';
+      });
+    });
+
+    // Filter functionality
+    const filterButtons = document.querySelectorAll('.filter-button');
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const filter = button.getAttribute('data-filter');
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        serviceCards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filter === 'all' || category === filter) {
+            card.style.display = 'block';
+            setTimeout(() => {
+              card.classList.add('visible');
+            }, 100);
+          } else {
+            card.classList.remove('visible');
+            setTimeout(() => {
+              card.style.display = 'none';
+            }, 500);
+          }
+        });
+      });
+    });
+
+    // Order button sparkle effect
+    const orderButton = document.querySelector('.order-button');
+    orderButton.addEventListener('click', (e) => {
+      const sparkle = document.createElement('div');
+      sparkle.style.position = 'absolute';
+      sparkle.style.top = '50%';
+      sparkle.style.left = '50%';
+      sparkle.style.width = '10px';
+      sparkle.style.height = '10px';
+      sparkle.style.background = '#d4af37';
+      sparkle.style.borderRadius = '50%';
+      sparkle.style.transform = 'translate(-50%, -50%)';
+      sparkle.style.animation = 'sparkleFade 0.5s ease forwards';
+      orderButton.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 500);
+    });
+
+    // Sparkle animation
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes sparkleFade {
+        0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
