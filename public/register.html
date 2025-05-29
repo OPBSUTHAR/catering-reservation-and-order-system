@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Register - Catering Reservation System</title>
+  <title>Register - Magical Catering System</title>
+  <link rel="stylesheet" href="css/animations.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <script type="module" src="js/login.js"></script>
   <style>
     :root {
       --primary: #4caf50;
@@ -38,7 +38,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .container {
+    .auth-container {
       background: var(--white);
       padding: 2.5rem;
       max-width: 500px;
@@ -55,21 +55,21 @@
       to { transform: scale(1); opacity: 1; }
     }
 
-    .header {
+    .auth-header {
       text-align: center;
       margin-bottom: 2rem;
     }
 
-    .header h1 {
+    .auth-header h1 {
       font-size: 2rem;
       color: var(--gray-dark);
     }
 
-    .header span {
+    .auth-header span {
       color: var(--primary);
     }
 
-    .form {
+    .auth-form {
       display: flex;
       flex-direction: column;
       gap: 1.2rem;
@@ -87,14 +87,16 @@
       color: var(--gray-dark);
     }
 
-    .form-group input {
+    .form-group input,
+    .form-group select {
       padding: 0.8rem 1rem;
       border: 1px solid #ccc;
       border-radius: 8px;
       transition: all 0.3s ease;
     }
 
-    .form-group input:focus {
+    .form-group input:focus,
+    .form-group select:focus {
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
       outline: none;
@@ -131,19 +133,19 @@
       transform: translateY(-2px);
     }
 
-    .footer {
+    .auth-footer {
       text-align: center;
       margin-top: 1.5rem;
       font-size: 0.9rem;
       color: #555;
     }
 
-    .footer a {
+    .auth-footer a {
       color: var(--primary);
       text-decoration: none;
     }
 
-    .footer a:hover {
+    .auth-footer a:hover {
       text-decoration: underline;
     }
 
@@ -164,6 +166,16 @@
       background: var(--error);
     }
 
+    .notification.show {
+      display: block;
+      animation: slideInRight 0.3s ease;
+    }
+
+    @keyframes slideInRight {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+
     .shake {
       animation: shake 0.3s linear;
     }
@@ -177,135 +189,195 @@
     }
 
     @media (max-width: 500px) {
-      .container {
+      .auth-container {
         padding: 1.5rem;
       }
 
-      .header h1 {
+      .auth-header h1 {
         font-size: 1.5rem;
       }
     }
   </style>
 </head>
 <body>
-
-<div class="container">
-  <div class="header">
-    <h1>Catering<span>System</span></h1>
-    <p>Create your account</p>
+  <div class="auth-container">
+    <div class="auth-header">
+      <h1>Magical<span>Catering</span></h1>
+      <p>Create your account</p>
+    </div>
+    <form class="auth-form" id="registerForm">
+      <div class="form-group">
+        <label for="role">Register As</label>
+        <select id="role" name="role" required>
+          <option value="" disabled selected>Select a role</option>
+          <option value="customer">Customer</option>
+          <option value="admin">Admin</option>
+        </select>
+        <small id="roleError">Please select a role</small>
+      </div>
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input id="name" name="name" type="text" required/>
+        <small id="nameError">Full name is required</small>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required/>
+        <small id="emailError">Valid email is required</small>
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input id="phone" name="phone" type="tel" required pattern="\+91\s?(\d{5}\s?\d{5}|\d{10})" placeholder="+91 98765 43210"/>
+        <small id="phoneError">Valid Indian phone (e.g., +91 98765 43210) is required</small>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required minlength="6"/>
+        <i class="fas fa-eye toggle-password" data-target="password"></i>
+        <small id="passwordError">Minimum 6 characters</small>
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input id="confirmPassword" name="confirmPassword" type="password" required/>
+        <i class="fas fa-eye toggle-password" data-target="confirmPassword"></i>
+        <small id="confirmPasswordError">Passwords must match</small>
+      </div>
+      <div class="form-group">
+        <input type="checkbox" id="terms" required/>
+        <label for="terms">I agree to <a href="disclaimer.html">Terms</a> & <a href="disclaimer.html">Privacy</a></label>
+        <small id="termsError">You must agree to the terms</small>
+      </div>
+      <button type="submit" class="btn">Create Account</button>
+    </form>
+    <div class="auth-footer">
+      Already have an account? <a href="login.html">Login</a>
+    </div>
   </div>
-  <form class="form" id="registerForm">
-    <div class="form-group">
-      <label for="name">Full Name</label>
-      <input id="name" name="name" type="text" required/>
-      <small id="nameError">Full name is required</small>
-    </div>
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input id="email" name="email" type="email" required/>
-      <small id="emailError">Valid email is required</small>
-    </div>
-    <div class="form-group">
-      <label for="phone">Phone</label>
-      <input id="phone" name="phone" type="tel" required/>
-      <small id="phoneError">Valid phone is required</small>
-    </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" required/>
-      <i class="fas fa-eye toggle-password" data-target="password"></i>
-      <small id="passwordError">Min 6 characters</small>
-    </div>
-    <div class="form-group">
-      <label for="confirmPassword">Confirm Password</label>
-      <input id="confirmPassword" name="confirmPassword" type="password" required/>
-      <i class="fas fa-eye toggle-password" data-target="confirmPassword"></i>
-      <small id="confirmPasswordError">Passwords must match</small>
-    </div>
-    <div class="form-group">
-      <input type="checkbox" id="terms" required/>
-      <label for="terms">I agree to <a href="#">Terms</a> & <a href="#">Privacy</a></label>
-      <small id="termsError">You must agree</small>
-    </div>
-    <button type="submit" class="btn">Create Account</button>
-  </form>
-  <div class="footer">
-    Already have an account? <a href="login.html">Login</a>
-  </div>
-</div>
 
-<div class="notification" id="notification"></div>
+  <div class="notification" id="notification"></div>
 
-<footer>
+  <footer class="developer-footer">
     <p>Developed by Om Prakash Suthar © 2025 Magical Catering System</p>
-    <p>Follow us on <a href="#">Social Media</a></p>
-</footer>
+    <p>Follow us on <a href="contact.html">Social Media</a></p>
+  </footer>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-<script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCTMagK8zneRb7DjWbFO9CgV03z7Khmy3g",
+      authDomain: "cateringreservationorderingsys.firebaseapp.com",
+      projectId: "cateringreservationorderingsys",
+      storageBucket: "cateringreservationorderingsys.firebasestorage.app",
+      messagingSenderId: "737129861298",
+      appId: "1:737129861298:web:9f35ebc42b566b475039ab",
+      measurementId: "G-F7FYE2NDF3"
+    };
 
-
-  const form = document.getElementById('registerForm');
-  const notification = document.getElementById('notification');
-  const showError = (id, message) => {
-    const el = document.getElementById(id);
-    el.style.display = 'block';
-    el.parentElement.classList.add('shake');
-    setTimeout(() => el.parentElement.classList.remove('shake'), 300);
-  };
-
-  const showNotification = (msg, type = 'success') => {
-    notification.className = `notification ${type}`;
-    notification.textContent = msg;
-    notification.style.display = 'block';
-    setTimeout(() => {
-      notification.style.display = 'none';
-    }, 3000);
-  };
-
-  document.querySelectorAll('.toggle-password').forEach(icon => {
-    icon.addEventListener('click', () => {
-      const input = document.getElementById(icon.dataset.target);
-      input.type = input.type === 'password' ? 'text' : 'password';
-      icon.classList.toggle('fa-eye-slash');
-    });
-  });
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    document.querySelectorAll('small').forEach(el => el.style.display = 'none');
-
-    const name = form.name.value.trim();
-    const email = form.email.value.trim();
-    const phone = form.phone.value.trim();
-    const password = form.password.value;
-    const confirmPassword = form.confirmPassword.value;
-    const terms = form.terms.checked;
-
-    if (!name) return showError('nameError');
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return showError('emailError');
-    if (!/^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/.test(phone)) return showError('phoneError');
-    if (password.length < 6) return showError('passwordError');
-    if (password !== confirmPassword) return showError('confirmPasswordError');
-    if (!terms) return showError('termsError');
-
+    // Initialize Firebase
     try {
-      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-      await userCredential.user.updateProfile({ displayName: name });
-      await userCredential.user.sendEmailVerification();
-      showNotification("Registered! Verify your email.");
-      setTimeout(() => (window.location.href = 'login.html'), 3000);
+      const app = initializeApp(firebaseConfig);
+      console.log('Firebase initialized successfully:', app);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      console.log('Auth initialized:', auth);
+      console.log('Firestore initialized:', db);
+
+      // Password toggle
+      document.querySelectorAll('.toggle-password').forEach(icon => {
+        icon.addEventListener('click', () => {
+          const input = document.getElementById(icon.dataset.target);
+          input.type = input.type === 'password' ? 'text' : 'password';
+          icon.classList.toggle('fa-eye-slash');
+        });
+      });
+
+      // Form submission
+      document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Reset error messages
+        document.querySelectorAll('small').forEach(el => el.style.display = 'none');
+
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const role = document.getElementById('role').value;
+        const terms = document.getElementById('terms').checked;
+
+        // Client-side validation
+        if (!name) return showError('nameError');
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return showError('emailError');
+        if (!/^\+91\s?(\d{5}\s?\d{5}|\d{10})$/.test(phone)) return showError('phoneError');
+        if (password.length < 6) return showError('passwordError');
+        if (password !== confirmPassword) return showError('confirmPasswordError');
+        if (!terms) return showError('termsError');
+        if (!role) return showError('roleError');
+
+        try {
+          // Create user in Firebase Authentication
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const user = userCredential.user;
+          console.log('User created in Firebase Authentication:', user.uid);
+
+          // Update user profile with displayName
+          await user.updateProfile({ displayName: name });
+          console.log('User profile updated with displayName:', name);
+
+          // Store user data in Firestore
+          await setDoc(doc(db, 'users', user.uid), {
+            name: name,
+            email: email,
+            phone: phone,
+            role: role,
+            createdAt: new Date().toISOString()
+          });
+          console.log('User data stored in Firestore:', { name, email, phone, role });
+
+          // Send email verification
+          await sendEmailVerification(user);
+          console.log('Email verification sent to:', email);
+
+          // Show success message and redirect
+          showNotification('Account created! Please check your email (including spam/junk) to verify your account.', 'success');
+          setTimeout(() => window.location.href = 'login.html', 3000);
+        } catch (error) {
+          let message = 'Registration failed. Please try again.';
+          if (error.code === 'auth/email-already-in-use') message = 'Email already in use.';
+          if (error.code === 'auth/invalid-email') message = 'Invalid email format.';
+          if (error.code === 'auth/network-request-failed') message = 'Network error. Please check your connection.';
+          if (error.code === 'firestore/permission-denied') message = 'Database access denied. Contact support.';
+          showNotification(message, 'error');
+          console.error('Registration error:', error);
+        }
+      });
+
+      // Error display function
+      function showError(id) {
+        const el = document.getElementById(id);
+        el.style.display = 'block';
+        el.parentElement.classList.add('shake');
+        setTimeout(() => el.parentElement.classList.remove('shake'), 300);
+      }
+
+      // Notification function
+      function showNotification(message, type = 'info') {
+        const notification = document.getElementById('notification');
+        if (notification) {
+          notification.textContent = message;
+          notification.className = `notification ${type} show`;
+          setTimeout(() => notification.classList.remove('show'), 3000);
+        }
+      }
     } catch (error) {
-      let message = 'Registration failed.';
-      if (error.code === 'auth/email-already-in-use') message = 'Email already in use.';
-      if (error.code === 'auth/invalid-email') message = 'Invalid email format.';
-      showNotification(message, 'error');
+      console.error('Firebase initialization error:', error);
+      showNotification('Failed to initialize Firebase. Please try again later.', 'error');
     }
-  });
-</script>
+  </script>
 </body>
 </html>
