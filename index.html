@@ -4,11 +4,79 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Magic Bean Catering</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/animations.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Fredoka+One&display=swap" rel="stylesheet">
   <style>
-    /* Additional styles for the enhanced beanstalk */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0a0a23;
+      color: #e0e0e0;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Floating Background Effects */
+    .sky {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(180deg, #1e1e5f, #3a2a7d, #6b3fa0);
+      animation: skyCycle 20s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes skyCycle {
+      0% { background: linear-gradient(180deg, #1e1e5f, #3a2a7d, #6b3fa0); }
+      50% { background: linear-gradient(180deg, #0a0a23, #1e1e5f, #3a2a7d); }
+      100% { background: linear-gradient(180deg, #1e1e5f, #3a2a7d, #6b3fa0); }
+    }
+
+    .ground {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 150px;
+      background: linear-gradient(to top, #1a3c34, #2e5a3f);
+      z-index: 0;
+    }
+
+    /* Floating Particles */
+    .particles-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: radial-gradient(circle, #8BC34A, transparent);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: float 15s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(1); opacity: 0.6; }
+      50% { opacity: 0.9; }
+      100% { transform: translateY(-20vh) scale(0.5); opacity: 0; }
+    }
+
+    /* Enhanced Beanstalk */
     .beanstalk-container {
       position: fixed;
       top: 0;
@@ -17,121 +85,340 @@
       pointer-events: none;
       z-index: 1;
     }
-    
+
     .beanstalk-left, .beanstalk-right {
       position: absolute;
       top: 0;
       bottom: 0;
       width: 150px;
       overflow: hidden;
+      transition: transform 0.1s ease-out;
     }
-    
+
     .beanstalk-left {
       left: 0;
     }
-    
+
     .beanstalk-right {
       right: 0;
     }
-    
+
     .main-stalk {
       position: absolute;
       bottom: 0;
       width: 20px;
       background: linear-gradient(to right, #3a7d34, #4CAF50);
       border-radius: 10px;
+      box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+      animation: grow 3s ease-out forwards, sway 5s infinite ease-in-out;
     }
-    
+
+    @keyframes grow {
+      0% { height: 0; }
+      100% { height: 80%; }
+    }
+
+    @keyframes sway {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(2deg); }
+      100% { transform: rotate(0deg); }
+    }
+
     .branch {
       position: absolute;
       width: 15px;
       background: linear-gradient(to right, #3a7d34, #4CAF50);
       transform-origin: bottom center;
       border-radius: 8px;
+      box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+      animation: branchSway 4s infinite ease-in-out;
     }
-    
+
+    @keyframes branchSway {
+      0% { transform: rotate(-30deg); }
+      50% { transform: rotate(-28deg); }
+      100% { transform: rotate(-30deg); }
+    }
+
     .leaf {
       position: absolute;
       width: 30px;
       height: 30px;
-      background-color: #6a9e5e;
+      background: radial-gradient(circle, #6a9e5e, #4CAF50);
       border-radius: 50% 0 50% 50%;
       transform: rotate(-45deg);
+      box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+      animation: flutter 3s infinite ease-in-out;
     }
-    
+
+    @keyframes flutter {
+      0% { transform: rotate(-45deg) scale(1); }
+      50% { transform: rotate(-50deg) scale(1.1); }
+      100% { transform: rotate(-45deg) scale(1); }
+    }
+
     .bean-cluster {
       position: absolute;
-      bottom: 40%;
       width: 60px;
       height: 60px;
     }
-    
+
     .bean {
       position: absolute;
       width: 20px;
       height: 15px;
-      background-color: #8BC34A;
+      background: radial-gradient(circle, #8BC34A, #AED581);
       border-radius: 50%;
       opacity: 0.8;
+      box-shadow: 0 0 10px rgba(139, 195, 74, 0.6);
+      animation: sparkle 2s infinite ease-in-out;
     }
-    
-    /* Content positioning */
+
+    @keyframes sparkle {
+      0% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 10px rgba(139, 195, 74, 0.6); }
+      50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 20px rgba(139, 195, 74, 0.9); }
+      100% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 10px rgba(139, 195, 74, 0.6); }
+    }
+
+    /* Main Content Container */
     .magic-container {
       position: relative;
       z-index: 2;
-      background-color: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      min-height: 100vh;
+      padding: 2rem;
     }
-    
-    /* Responsive adjustments */
+
+    /* Header Styles */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .logo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2.5rem;
+      color: #AED581;
+      text-shadow: 0 0 10px rgba(174, 213, 129, 0.8);
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    .logo span {
+      color: #FF6B6B;
+      text-shadow: 0 0 10px rgba(255, 107, 107, 0.8);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); text-shadow: 0 0 10px rgba(174, 213, 129, 0.8); }
+      50% { transform: scale(1.05); text-shadow: 0 0 20px rgba(174, 213, 129, 1); }
+      100% { transform: scale(1); text-shadow: 0 0 10px rgba(174, 213, 129, 0.8); }
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1.5rem;
+      background: #FF6B6B;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+    }
+
+    .btn:hover {
+      background: #FF8E8E;
+      box-shadow: 0 0 25px rgba(255, 107, 107, 0.8);
+      transform: translateY(-3px);
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+    }
+
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Navigation Styles */
+    .magic-nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem 0;
+    }
+
+    .nav-link {
+      color: #AED581;
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: 500;
+      position: relative;
+      padding: 0.5rem 1rem;
+      transition: all 0.3s ease;
+      text-shadow: 0 0 5px rgba(174, 213, 129, 0.5);
+    }
+
+    .nav-link:hover {
+      color: #FF6B6B;
+      text-shadow: 0 0 15px rgba(255, 107, 107, 0.8);
+      transform: translateY(-3px);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: #FF6B6B;
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Footer Styles */
+    .footer {
+      text-align: center;
+      padding: 2rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+    }
+
+    .footer p {
+      font-size: 1rem;
+      color: #AED581;
+      animation: bounce 2s infinite ease-in-out;
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0); }
+    }
+
+    .social-links {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .social-link {
+      font-size: 1.5rem;
+      color: #AED581;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      text-shadow: 0 0 5px rgba(174, 213, 129, 0.5);
+    }
+
+    .social-link:hover {
+      color: #FF6B6B;
+      text-shadow: 0 0 15px rgba(255, 107, 107, 0.8);
+      transform: rotate(360deg);
+    }
+
+    /* Responsive Adjustments */
     @media (max-width: 768px) {
       .beanstalk-left, .beanstalk-right {
         width: 100px;
       }
+
+      .magic-nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .nav-link {
+        font-size: 1rem;
+      }
+
+      .logo {
+        font-size: 2rem;
+      }
     }
-    
+
     @media (max-width: 480px) {
       .beanstalk-left, .beanstalk-right {
         display: none;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .auth-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .btn {
+        padding: 0.5rem 1rem;
       }
     }
   </style>
 </head>
 <body>
+  <!-- Floating Background Elements -->
+  <div class="sky"></div>
+  <div class="ground"></div>
+  <div class="particles-container" id="particles-container"></div>
+
   <!-- Beanstalk Background Elements -->
   <div class="beanstalk-container">
     <div class="beanstalk-left">
       <div class="main-stalk" style="height: 80%; left: 30px;"></div>
-      
-      <!-- Branches on left stalk -->
       <div class="branch" style="height: 120px; left: 30px; bottom: 60%; transform: rotate(-30deg);"></div>
       <div class="leaf" style="left: 10px; bottom: 58%;"></div>
-      
       <div class="branch" style="height: 80px; left: 25px; bottom: 40%; transform: rotate(-15deg);"></div>
       <div class="leaf" style="left: 0; bottom: 38%;"></div>
-      
       <div class="branch" style="height: 100px; left: 35px; bottom: 25%; transform: rotate(-45deg);"></div>
       <div class="leaf" style="left: 15px; bottom: 23%;"></div>
-      
       <div class="bean-cluster" style="left: 20px; bottom: 10px;">
         <div class="bean" style="bottom: 0; left: 0;"></div>
         <div class="bean" style="bottom: 5px; left: 15px;"></div>
         <div class="bean" style="bottom: 10px; left: 30px;"></div>
       </div>
     </div>
-    
     <div class="beanstalk-right">
       <div class="main-stalk" style="height: 90%; right: 40px;"></div>
-      
-      <!-- Branches on right stalk -->
       <div class="branch" style="height: 110px; right: 40px; bottom: 65%; transform: rotate(25deg);"></div>
       <div class="leaf" style="right: 25px; bottom: 63%;"></div>
-      
       <div class="branch" style="height: 90px; right: 35px; bottom: 45%; transform: rotate(40deg);"></div>
       <div class="leaf" style="right: 15px; bottom: 43%;"></div>
-      
       <div class="branch" style="height: 70px; right: 45px; bottom: 30%; transform: rotate(15deg);"></div>
       <div class="leaf" style="right: 30px; bottom: 28%;"></div>
-      
       <div class="bean-cluster" style="right: 30px; bottom: 10px;">
         <div class="bean" style="bottom: 0; right: 0;"></div>
         <div class="bean" style="bottom: 5px; right: 15px;"></div>
@@ -142,68 +429,87 @@
 
   <!-- Main Content Container -->
   <div class="magic-container">
-    <!-- Animated Background -->
-    <div class="sky"></div>
-    <div class="ground"></div>
-    
-    <!-- Main Content -->
     <header class="header">
-      <h1 class="logo pulse">Magic Bean <span>Catering</span></h1>
+      <h1 class="logo">Magic Bean <span>Catering</span></h1>
       <div class="auth-buttons">
-        <a href="login.html" class="btn btn-magic swing">Login</a>
-        <button id="logoutBtn" class="btn btn-magic hidden">Logout</button>
+        <a href="public_html/login.html" class="btn">Login</a>
+        <button id="logoutBtn" class="btn hidden">Logout</button>
       </div>
     </header>
-    
     <main class="main-content">
-      <!-- Animated Navigation -->
       <nav class="magic-nav">
-        <a href="aboutus.html" class="nav-link swing">About Us</a>
-        <a href="services.html" class="nav-link swing">Services</a>
-        <a href="contact.html" class="nav-link swing">Contact</a>
-        <a href="disclaimer.html" class="nav-link swing">Disclaimer</a>
+        <a href="public_html/aboutus.html" class="nav-link">About Us</a>
+        <a href="public_html/services.html" class="nav-link">Services</a>
+        <a href="public_html/contact.html" class="nav-link">Contact</a>
+        <a href="public_html/disclaimer.html" class="nav-link">Disclaimer</a>
       </nav>
     </main>
-    
     <footer class="footer">
-      <p class="bounce">© 2025 Magic Bean Catering - Where every meal is an adventure</p>
+      <p>© 2025 Magic Bean Catering - Where every meal is an adventure</p>
       <div class="social-links">
-        <a href="#" class="social-link swing">📱</a>
-        <a href="#" class="social-link swing">✉️</a>
-        <a href="#" class="social-link swing">🔮</a>
+        <a href="#" class="social-link">📱</a>
+        <a href="#" class="social-link">✉️</a>
+        <a href="#" class="social-link">🔮</a>
       </div>
     </footer>
   </div>
 
-  <script src="js/auth.js" type="module"></script>
-  <script src="js/main.js" type="module"></script>
-  
   <script>
-    // Additional JS for interactive elements
     document.addEventListener('DOMContentLoaded', () => {
-      // Make beans wiggle randomly
+      // Generate Floating Particles
+      const particlesContainer = document.getElementById('particles-container');
+      const createParticle = () => {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.animationDuration = `${10 + Math.random() * 10}s`;
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        particlesContainer.appendChild(particle);
+        setTimeout(() => particle.remove(), 15000);
+      };
+      for (let i = 0; i < 30; i++) {
+        createParticle();
+      }
+      setInterval(createParticle, 500);
+
+      // Bean and Leaf Animations
       const beans = document.querySelectorAll('.bean');
       beans.forEach(bean => {
         setInterval(() => {
           bean.style.transform = `translateY(${Math.random() * 5}px) rotate(${Math.random() * 10 - 5}deg)`;
         }, 2000);
       });
-      
-      // Make leaves flutter
+
       const leaves = document.querySelectorAll('.leaf');
       leaves.forEach(leaf => {
         setInterval(() => {
           leaf.style.transform = `rotate(${Math.random() * 20 - 45}deg)`;
         }, 3000);
       });
-      
-      // Check auth state and update UI
+
+      // Parallax Effect for Beanstalk on Scroll
+      const beanstalkLeft = document.querySelector('.beanstalk-left');
+      const beanstalkRight = document.querySelector('.beanstalk-right');
+      window.addEventListener('scroll', () => {
+        const scrollPos = window.scrollY;
+        beanstalkLeft.style.transform = `translateY(${scrollPos * 0.2}px)`;
+        beanstalkRight.style.transform = `translateY(${scrollPos * 0.2}px)`;
+      });
+
+      // Interactive Beanstalk Movement on Mouse Move
+      window.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 10;
+        beanstalkLeft.style.transform = `translateX(${x}px)`;
+        beanstalkRight.style.transform = `translateX(${-x}px)`;
+      });
+
+      // Auth State Management
       const logoutBtn = document.getElementById('logoutBtn');
-      if (localStorage.getItem('isLoggedIn') {
+      if (localStorage.getItem('isLoggedIn')) {
         document.querySelector('.auth-buttons a').classList.add('hidden');
         logoutBtn.classList.remove('hidden');
       }
-      
+
       logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('isLoggedIn');
         window.location.reload();
