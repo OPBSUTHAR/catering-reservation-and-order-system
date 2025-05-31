@@ -26,10 +26,13 @@
     body {
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(to right, #f5f7fa, #c3cfe2);
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding-top: 70px; /* Adjust based on header height */
+      padding-bottom: 100px; /* Adjust based on footer height */
       animation: fadeIn 1s ease-out;
     }
 
@@ -263,6 +266,7 @@
       left: 0;
       width: 100%;
       z-index: 1000;
+      text-align: center;
     }
 
     footer p {
@@ -277,28 +281,6 @@
     }
 
     footer p a:hover {
-      color: var(--white);
-    }
-
-    .developer-footer {
-      background: rgba(17, 24, 39, 0.9);
-      color: var(--white);
-      text-align: center;
-      padding: 1rem;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      font-size: 0.8rem;
-    }
-
-    .developer-footer a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .developer-footer a:hover {
       color: var(--white);
     }
 
@@ -323,10 +305,7 @@
       footer {
         font-size: 0.7rem;
       }
-
-      .developer-footer {
-        font-size: 0.7rem;
-      }
+    }
   </style>
 </head>
 <header>
@@ -401,7 +380,7 @@
 
   <div class="notification" id="notification"></div>
 
-  <footer class="developer-footer">
+  <footer>
     <p>Developed by Om Prakash Suthar © 2025 Magical Catering System</p>
     <p>Follow us on <a href="contact.html">Social Media</a></p>
   </footer>
