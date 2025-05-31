@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Updated viewport meta tag to prevent zooming -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Login - Magical Catering System</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    // css reset to ensure consistent styling across browsers
+    /* Enhanced CSS reset to ensure consistent styling across browsers */
     html, body, div, span, applet, object, iframe,
     h1, h2, h3, h4, h5, h6, p, blockquote, pre,
     a, abbr, acronym, address, big, cite, code,
@@ -27,21 +28,36 @@
       font-size: 100%;
       font: inherit;
       vertical-align: baseline;
+      /* Prevent any global scaling */
+      transform: none !important;
+      zoom: 1 !important;
     }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      font-size: 16px; /* Set a base font size for consistency */
+    }
+
     body {
       line-height: 1;
     }
+
     ol, ul {
       list-style: none;
     }
+
     blockquote, q {
       quotes: none;
     }
+
     blockquote:before, blockquote:after,
     q:before, q:after {
       content: '';
       content: none;
     }
+
     table {
       border-collapse: collapse;
       border-spacing: 0;
@@ -58,14 +74,12 @@
 
     * {
       box-sizing: border-box;
-      padding: 0;
-      margin: 0;
     }
 
     body {
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(to right, #f5f7fa, #c3cfe2);
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -81,7 +95,7 @@
       background: var(--white);
       padding: 2.5rem;
       max-width: 500px;
-      width: 100%;
+      width: 90%; /* Use percentage for better scaling */
       border-radius: 15px;
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
       display: flex;
@@ -108,6 +122,12 @@
       color: var(--primary);
     }
 
+    .auth-header p {
+      font-size: 1rem;
+      color: #555;
+      margin-top: 0.5rem;
+    }
+
     .auth-form {
       display: flex;
       flex-direction: column;
@@ -131,6 +151,7 @@
       border: 1px solid #ccc;
       border-radius: 8px;
       transition: all 0.3s ease;
+      font-size: 1rem;
     }
 
     .form-group input:focus, .form-group select:focus {
@@ -171,6 +192,11 @@
       cursor: pointer;
     }
 
+    .remember-me label {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
     .forgot-password {
       color: var(--primary);
       text-decoration: none;
@@ -189,12 +215,32 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: 600;
+      font-size: 1rem;
       transition: transform 0.2s, background 0.3s;
     }
 
     .btn-primary:hover {
       background: var(--secondary);
       transform: translateY(-2px);
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .auth-footer p {
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .auth-footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .auth-footer a:hover {
+      text-decoration: underline;
     }
 
     .social-login {
@@ -243,6 +289,7 @@
       background: var(--white);
       cursor: pointer;
       font-weight: 500;
+      font-size: 0.9rem;
       transition: all 0.3s ease;
     }
 
@@ -261,6 +308,7 @@
       border-radius: 8px;
       display: none;
       font-weight: 500;
+      font-size: 0.9rem;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
 
@@ -304,6 +352,29 @@
 
       .auth-header h1 {
         font-size: 1.5rem;
+      }
+
+      .auth-header p {
+        font-size: 0.9rem;
+      }
+
+      .form-group input, .form-group select {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+      }
+
+      .toggle-password {
+        top: 36px;
+      }
+
+      .btn-primary {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+      }
+
+      .social-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
       }
     }
   </style>
