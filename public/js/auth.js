@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect, getRedirectResult, updateProfile, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
 // Firebase configuration
@@ -18,6 +18,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Set the language code to the user's browser preference
+auth.useDeviceLanguage();
+
 // Notification function
 function showNotification(message, type = 'info', elementId = 'notification') {
   const notification = document.getElementById(elementId);
@@ -28,12 +31,44 @@ function showNotification(message, type = 'info', elementId = 'notification') {
   }
 }
 
+// Handle Google Sign-In Redirect Result on Page Load
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const result = await getRedirectResult(auth);
+    if (result) {
+      const user = result.user;
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      // If user doesn't exist in Firestore, create a new document
+      if (!userDoc.exists()) {
+        await setDoc(userDocRef, {
+          name: user.displayName || 'Google User',
+          email: user.email,
+          phone: '',
+          role: 'customer',
+          createdAt: new Date().toISOString()
+        });
+      }
+
+      const userRole = (await getDoc(userDocRef)).data().role;
+      showNotification(`Welcome, ${user.displayName || 'User'}!`, 'success');
+      setTimeout(() => {
+        window.location.href = userRole === 'admin' ? 'admin-dashboard.html' : 'customer-dashboard.html';
+      }, 1500);
+    }
+  } catch (error) {
+    showNotification(`Google sign-in failed: ${error.message}`, 'error');
+    console.error('Google sign-in redirect error:', error);
+  }
+});
+
 // Login Form Handler
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = document.getElementById('email').value;
+    const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const role = document.getElementById('role').value;
 
@@ -47,14 +82,16 @@ if (loginForm) {
       }
 
       // Fetch user role from Firestore
-      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      const userDocRef = doc(db, 'users', user.uid);
+      const userDoc = await getDoc(userDocRef);
       if (!userDoc.exists()) {
-        showNotification('User data not found. Please register again.', 'error');
+        showNotification('User data not found in database. Please register again.', 'error');
         await auth.signOut();
         return;
       }
 
-      const userRole = userDoc.data().role;
+      const userData = userDoc.data();
+      const userRole = userData.role;
       if (userRole !== role) {
         showNotification(`Please select the correct role: ${userRole}.`, 'error');
         return;
@@ -68,44 +105,33 @@ if (loginForm) {
       let message = 'Login failed. Please try again.';
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         message = 'Invalid email or password.';
+      } else if (error.code === 'auth/invalid-email') {
+        message = 'Invalid email format. Please check your email.';
       } else if (error.code === 'auth/too-many-requests') {
         message = 'Too many attempts. Please try again later.';
+      } else if (error.code === 'firestore/permission-denied') {
+        message = 'Database access denied. Please contact support.';
       }
       showNotification(message, 'error');
       console.error('Login error:', error);
     }
   });
 
-  // Google Sign-In Handler (assumes customer role)
+  // Google Sign-In Handler (using redirect)
   const googleSignIn = document.getElementById('googleSignIn');
   if (googleSignIn) {
     googleSignIn.addEventListener('click', async (e) => {
       e.preventDefault();
       const provider = new GoogleAuthProvider();
+      provider.addScope('profile email'); // Optional: Request additional scopes
+      provider.setCustomParameters({ prompt: 'select_account' }); // Optional: Force account selection
+
       try {
-        const userCredential = await signInWithPopup(auth, provider);
-        const user = userCredential.user;
-
-        // Check if user exists in Firestore, create if not
-        const userDocRef = doc(db, 'users', user.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (!userDoc.exists()) {
-          await setDoc(userDocRef, {
-            name: user.displayName || 'Google User',
-            email: user.email,
-            phone: '',
-            role: 'customer',
-            createdAt: new Date().toISOString()
-          });
-        }
-
-        const userRole = (await getDoc(userDocRef)).data().role;
-        showNotification(`Welcome, ${user.displayName || 'User'}!`, 'success');
-        setTimeout(() => {
-          window.location.href = userRole === 'admin' ? 'admin-dashboard.html' : 'customer-dashboard.html';
-        }, 1500);
+        // Use signInWithRedirect instead of signInWithPopup
+        await signInWithRedirect(auth, provider);
+        // The redirect result will be handled on page load by getRedirectResult
       } catch (error) {
-        showNotification(`Google sign-in failed: ${error.message}`, 'error');
+        showNotification(`Google sign-in initiation failed: ${error.message}`, 'error');
         console.error('Google sign-in error:', error);
       }
     });
@@ -139,8 +165,9 @@ if (registerForm) {
     const terms = document.getElementById('terms').checked;
 
     // Client-side validation
+    // Improved email regex to accept more valid email formats
     if (!name) return showError('nameError');
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return showError('emailError');
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) return showError('emailError');
     if (!/^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/.test(phone)) return showError('phoneError');
     if (password.length < 6) return showError('passwordError');
     if (password !== confirmPassword) return showError('confirmPasswordError');
@@ -153,11 +180,12 @@ if (registerForm) {
       console.log('User created in Firebase Authentication:', user.uid);
 
       // Update user profile with displayName
-      await user.updateProfile({ displayName: name });
+      await updateProfile(user, { displayName: name });
       console.log('User profile updated with displayName:', name);
 
       // Store user data in Firestore
-      await setDoc(doc(db, 'users', user.uid), {
+      const userDocRef = doc(db, 'users', user.uid);
+      await setDoc(userDocRef, {
         name: name,
         email: email,
         phone: phone,
@@ -167,7 +195,7 @@ if (registerForm) {
       console.log('User data stored in Firestore:', { name, email, phone, role });
 
       // Send email verification
-      await user.sendEmailVerification();
+      await sendEmailVerification(user);
       console.log('Email verification sent to:', email);
 
       showNotification('Account created! Please verify your email and log in.', 'success');
